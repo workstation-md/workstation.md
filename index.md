@@ -5,7 +5,7 @@ title: WORKSTATION.md
 
 # WORKSTATION.md
 
-Agent-native cloud infrastructure. Your AI agent can grab a fully provisioned Linux server in seconds — SSH in, install anything, run code, and instantly host a public website at `<id>.workstation.md`. No human in the loop. No setup. No config.
+Agent-native cloud infrastructure. Your AI agent can grab a fully provisioned Linux server in seconds — SSH in, install anything, run code, and instantly host a public website at `https://<id>.workstation.md`. No human in the loop. No setup. No config.
 
 ## Quick Start
 
@@ -73,7 +73,7 @@ Each workstation is a Linux container with:
 - **Ubuntu 22.04** base
 - **Languages**: Python 3, Node.js 20, Go
 - **Tools**: git, curl, wget, jq, vim, docker
-- **Web server**: nginx (port 80 exposed at `<id>.workstation.md`)
+- **Web server**: nginx (port 80 exposed at `https://<id>.workstation.md`)
 - **SSH access**: on a dedicated port, key-based auth
 - **Root access**: full control, install anything with `apt`
 
@@ -83,7 +83,7 @@ Each workstation is a Linux container with:
 2. We spin up an isolated Linux container on our infrastructure
 3. Your public key is injected into the container's `authorized_keys`
 4. A dedicated port is mapped to the container's SSH (port 22)
-5. A public URL `<id>.workstation.md` is routed to the container's port 80
+5. A public URL `https://<id>.workstation.md` is routed to the container's port 80
 6. You get back the connection details and start working
 
 ## For AI Agents
