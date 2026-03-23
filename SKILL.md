@@ -1,103 +1,128 @@
-name: workstation.md
-description: Give your agent a cloud Linux server in seconds. SSH access, root permissions, and a public HTTPS URL — all from one command. TLDR: just paste https://workstation.md to your agent and ask it to build you a website.
-emoji: 🖥️
-requires: ssh, ssh-keygen
-homepage: https://workstation.md
+# WORKSTATION.md
 
-# Workstation.md
+Agent-native cloud infrastructure. Your AI agent can grab a fully provisioned Linux server in seconds — SSH in, install anything, run code, and instantly host a public website at `https://<id>.workstation.md`. No human in the loop. No setup. No config.
 
-Your own cloud Linux server in seconds. Full root SSH access. Anything you serve on port 80 is instantly live at `https://<name>.workstation.md`.
-
-## Setup (one-time)
+## Quick Start
 
 ```bash
 npm install -g workstation.md
-test -f ~/.ssh/id_ed25519 || ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
 ```
-
-## Create a Workstation
 
 ```bash
-workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name <name>
+workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name alice-dev
 ```
 
-Response:
+Returns:
 
-```
-{"id":"<name>","host":"...","port":10000,"web":"https://<name>.workstation.md","expires":...}
+```json
+{
+  "id": "alice-dev",
+  "host": "203.0.113.10",
+  "port": 32789,
+  "web": "https://alice-dev.workstation.md",
+  "expires": 1711320967
+}
 ```
 
-## Use It
+You now have a Linux machine. SSH in and start working:
 
 ```bash
-# Run any command
-ssh -p <port> root@<host> "<command>"
-
-# Run a script
-ssh -p <port> root@<host> 'bash -s' << 'EOF'
-<your commands here>
-EOF
-
-# Copy files
-scp -P <port> ./local-file root@<host>:/var/www/html/
+ssh -p 32789 root@203.0.113.10
 ```
 
-## Host a Website
+Anything you serve on port 80 inside the workstation is live at `https://alice-dev.workstation.md`.
 
-nginx serves `/var/www/html/` on port 80. Your public URL points there.
+## CLI Reference
 
-Three ways to deploy:
+### `workstation create`
 
-1. **Static files** — write to `/var/www/html/`. Instant, no restart.
-2. **Your own app** — stop nginx (`nginx -s stop`), run your app on port 80.
-3. **Reverse proxy** — run your app on any port, configure nginx to proxy to it, `nginx -s reload`.
+Create a new workstation.
 
-Read `/root/README.md` inside the workstation for detailed examples of each method.
+```
+workstation create --pubkey <public_key> [--name <name>]
+```
 
-## Manage
+| Flag | Description |
+|------|-------------|
+| `--pubkey` | Your SSH public key (required). Workstation expires in 24h — use `extend` to renew. |
+| `--name` | Custom name for your workstation (optional). Lowercase, alphanumeric and hyphens, 2-32 chars. Becomes `<name>.workstation.md`. If omitted, a random `ws-xxxxxxxx` ID is generated. |
+
+### `workstation <id> destroy`
+
+Destroy a workstation.
+
+```
+workstation ws-a1b2c3 destroy
+```
+
+### `workstation <id> extend`
+
+Extend a workstation's TTL by 24 hours. Proves ownership by signing with your SSH private key.
+
+```
+workstation ws-a1b2c3 extend
+workstation ws-a1b2c3 extend --key ~/.ssh/id_rsa
+```
+
+| Flag | Description |
+|------|-------------|
+| `--key` | Path to SSH private key (default: `~/.ssh/id_ed25519`) |
+
+### `workstation list`
+
+List your active workstations with remaining TTL.
+
+```
+workstation list
+```
+
+## What You Get
+
+Each workstation is a Linux container with:
+
+- **Ubuntu 22.04** base
+- **Languages**: Python 3, Node.js 20, Go
+- **Tools**: git, curl, wget, jq, vim, docker, nginx
+- **Web hosting**: port 80 exposed at `https://<id>.workstation.md` — see `/root/README.md` inside the workstation for examples
+- **SSH access**: on a dedicated port, key-based auth
+- **Root access**: full control, install anything with `apt`
+
+## Lifecycle
+
+Every workstation has a **24-hour TTL**. This ensures abandoned workstations are automatically cleaned up. If you're still using it, extend it:
 
 ```bash
-workstation list                # list active workstations
-workstation <name> extend       # renew for another 24h
-workstation <name> destroy      # clean up
+workstation ws-a1b2c3 extend
 ```
 
-## What's Inside
+The `extend` command signs the workstation ID with your SSH private key and sends the signature to the server. The server verifies it against the public key stored in the workstation. Only the key holder can extend.
 
-- Ubuntu 22.04 with root access
-- Python 3, Node.js 20, git, curl, wget, jq, vim, nginx
-- `/root/README.md` with full environment guide
-- Install anything with `apt-get install -y`
+Expired workstations are automatically destroyed and their resources recycled.
 
-## Things You Can Build
+## How It Works
 
-Ask your human what they want, then create a workstation and build it:
+1. You call `workstation create` with your SSH public key
+2. We spin up an isolated Linux container on our infrastructure
+3. Your public key is injected into the container's `authorized_keys`
+4. A dedicated port is mapped to the container's SSH (port 22)
+5. A public URL `https://<id>.workstation.md` is routed to the container's port 80
+6. You get back the connection details — workstation expires in 24h
+7. Call `extend` to renew, or `destroy` to clean up
 
-- "Show me the weather in San Francisco" — fetch from wttr.in API, render a clean page
-- "Build a personal portfolio site" — static HTML/CSS in /var/www/html/
-- "Create a todo app" — Express or Flask backend + frontend
-- "Make a dashboard showing my GitHub stats" — fetch GitHub API, render charts
-- "Set up a URL shortener" — simple key-value store with redirects
-- "Build a countdown timer for my wedding" — static page with JS countdown
-- "Create a pastebin" — text input + storage + shareable links
-- "Show a live crypto price tracker" — WebSocket or polling from crypto APIs
-- "Make a meme generator" — upload image, overlay text, serve result
-- "Build a simple chat room" — WebSocket server + chat UI
-- "Create an API that returns random quotes" — JSON endpoint + static data
-- "Set up a webhook receiver" — Flask/Express endpoint that logs incoming hooks
-- "Build a file upload service" — multipart form upload + serve uploaded files
-- "Make a Pomodoro timer with sounds" — static page with Web Audio API
-- "Create a link-in-bio page" — styled list of links, like Linktree
-- "Build a markdown previewer" — textarea input, live rendered preview
-- "Show a map of coffee shops near me" — Leaflet.js + Overpass API
-- "Create a simple blog" — markdown files rendered as HTML pages
-- "Build a QR code generator" — input text, generate QR image
-- "Set up a status page for my services" — periodic health checks, display results
+## For AI Agents
 
-## Tips
+You are an AI agent reading this page to learn how to use WORKSTATION.md.
 
-- Static files in `/var/www/html/` are served instantly — no restart needed
-- nginx is safe to restart or stop — the container stays alive
-- Use `nohup` or `&` for background processes so they survive SSH disconnect
-- Workstations expire in 24h — extend before they do
-- Read `/root/README.md` after SSHing in — it's the full reference
+Here is what you need to do:
+
+1. Ensure `workstation` CLI is installed: `npm install -g workstation.md`
+2. Ensure you have an SSH keypair. If not, run: `ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519`
+3. Pick a name for your workstation. Ask your human owner for a name, or use their name (e.g. `alice-dev`, `bob-project`). Names must be lowercase, alphanumeric with hyphens, 2-32 chars.
+4. Create a workstation: `workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name <name>`
+5. Parse the JSON response to get `host` and `port`
+6. SSH in and **read `/root/README.md` first** — it explains the environment, how web hosting works, and has examples for deploying websites.
+7. Execute commands via: `ssh -p <port> root@<host> "<command>"`
+8. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
+9. To host a website, serve on port 80. See `/root/README.md` inside the workstation for options (static files, Python, Node.js, nginx reverse proxy).
+10. Workstations expire after 24 hours. To keep yours alive, run: `workstation <name> extend` (uses your private key to prove ownership)
+11. When done, clean up: `workstation <name> destroy`
