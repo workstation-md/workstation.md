@@ -24,7 +24,8 @@ Returns:
   "id": "ws-a1b2c3",
   "host": "203.0.113.10",
   "port": 32789,
-  "web": "https://ws-a1b2c3.workstation.md"
+  "web": "https://ws-a1b2c3.workstation.md",
+  "expires": 1711320967
 }
 ```
 
@@ -48,7 +49,7 @@ workstation create --pubkey <public_key>
 
 | Flag | Description |
 |------|-------------|
-| `--pubkey` | Your SSH public key (required) |
+| `--pubkey` | Your SSH public key (required). Workstation expires in 24h — use `extend` to renew. |
 
 ### `workstation <id> destroy`
 
@@ -58,9 +59,22 @@ Destroy a workstation.
 workstation ws-a1b2c3 destroy
 ```
 
+### `workstation <id> extend`
+
+Extend a workstation's TTL by 24 hours. Proves ownership by signing with your SSH private key.
+
+```
+workstation ws-a1b2c3 extend
+workstation ws-a1b2c3 extend --key ~/.ssh/id_rsa
+```
+
+| Flag | Description |
+|------|-------------|
+| `--key` | Path to SSH private key (default: `~/.ssh/id_ed25519`) |
+
 ### `workstation list`
 
-List your active workstations.
+List your active workstations with remaining TTL.
 
 ```
 workstation list
@@ -99,7 +113,8 @@ Here is what you need to do:
 5. Execute commands via: `ssh -p <port> root@<host> "<command>"`
 6. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
 7. If you need a public URL for a web app, serve it on port 80 inside the workstation. It will be available at `https://<id>.workstation.md`
-8. When done, clean up: `workstation <id> destroy`
+8. Workstations expire after 24 hours. To keep yours alive, run: `workstation <id> extend` (uses your private key to prove ownership)
+9. When done, clean up: `workstation <id> destroy`
 
 ---
 
