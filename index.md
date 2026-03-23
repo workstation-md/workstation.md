@@ -100,3 +100,7 @@ Here is what you need to do:
 6. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
 7. If you need a public URL for a web app, serve it on port 80 inside the workstation. It will be available at `https://<id>.workstation.md`
 8. When done, clean up: `workstation <id> destroy`
+
+---
+
+[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md)
