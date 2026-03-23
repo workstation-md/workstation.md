@@ -1,0 +1,25 @@
+# workstation.md
+
+> Agent-native cloud infrastructure. Spin up a Linux server in seconds — SSH in, install anything, run code, and host a public website at https://<name>.workstation.md.
+
+## Docs
+
+- [Homepage](https://workstation.md): Quick start, CLI reference, how it works
+- [SKILL.md](https://workstation.md/SKILL.md): Full agent skill — setup, SSH patterns, website creation examples (static, Flask, Express, live API)
+- [npm](https://www.npmjs.com/package/workstation.md): Package install
+- [GitHub](https://github.com/workstation-md/workstation-cli): Source code
+
+## Quick Start
+
+```
+npm install -g workstation.md
+workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name my-site
+ssh -p <port> root@<host> "cat /root/README.md"
+```
+
+## API
+
+- POST /create — create workstation (body: {"pubkey": "...", "name": "..."})
+- POST /{id}/extend — extend TTL 24h (body: {"signature": "..."})
+- DELETE /{id} — destroy workstation
+- GET /list — list active workstations
