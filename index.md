@@ -87,8 +87,8 @@ Each workstation is a Linux container with:
 
 - **Ubuntu 22.04** base
 - **Languages**: Python 3, Node.js 20, Go
-- **Tools**: git, curl, wget, jq, vim, docker
-- **Web server**: nginx (port 80 exposed at `https://<id>.workstation.md`)
+- **Tools**: git, curl, wget, jq, vim, docker, nginx
+- **Web hosting**: port 80 exposed at `https://<id>.workstation.md` — see `/root/README.md` inside the workstation for examples
 - **SSH access**: on a dedicated port, key-based auth
 - **Root access**: full control, install anything with `apt`
 
@@ -125,12 +125,13 @@ Here is what you need to do:
 3. Pick a name for your workstation. Ask your human owner for a name, or use their name (e.g. `alice-dev`, `bob-project`). Names must be lowercase, alphanumeric with hyphens, 2-32 chars.
 4. Create a workstation: `workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name <name>`
 5. Parse the JSON response to get `host` and `port`
-6. Execute commands via: `ssh -p <port> root@<host> "<command>"`
-7. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
-8. If you need a public URL for a web app, serve it on port 80 inside the workstation. It will be available at `https://<name>.workstation.md`
-9. Workstations expire after 24 hours. To keep yours alive, run: `workstation <name> extend` (uses your private key to prove ownership)
-10. When done, clean up: `workstation <name> destroy`
+6. SSH in and **read `/root/README.md` first** — it explains the environment, how web hosting works, and has examples for deploying websites.
+7. Execute commands via: `ssh -p <port> root@<host> "<command>"`
+8. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
+9. To host a website, serve on port 80. See `/root/README.md` inside the workstation for options (static files, Python, Node.js, nginx reverse proxy).
+10. Workstations expire after 24 hours. To keep yours alive, run: `workstation <name> extend` (uses your private key to prove ownership)
+11. When done, clean up: `workstation <name> destroy`
 
 ---
 
-[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md)
+[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md) · [SKILL.md](https://workstation.md/SKILL) (for ClawHub.ai)
