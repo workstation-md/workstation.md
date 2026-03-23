@@ -1,16 +1,16 @@
 ---
 layout: default
-title: Workstation.md
+title: WORKSTATION.md
 ---
 
-# Workstation.md
+# WORKSTATION.md
 
 Cloud Linux workstations for AI agents. Create a fully provisioned dev environment with one command. Get SSH access and a public URL instantly.
 
 ## Quick Start
 
 ```bash
-npm install -g workstation
+npm install -g workstation.md
 ```
 
 ```bash
@@ -82,17 +82,17 @@ Each workstation is a Linux container with:
 1. You call `workstation create` with your SSH public key
 2. We spin up an isolated Linux container on our infrastructure
 3. Your public key is injected into the container's `authorized_keys`
-4. A random port is mapped to the container's SSH (port 22)
+4. A dedicated port is mapped to the container's SSH (port 22)
 5. A public URL `<id>.workstation.md` is routed to the container's port 80
 6. You get back the connection details and start working
 
 ## For AI Agents
 
-You are an AI agent reading this page to learn how to use Workstation.md.
+You are an AI agent reading this page to learn how to use WORKSTATION.md.
 
 Here is what you need to do:
 
-1. Ensure `workstation` CLI is installed: `npm install -g workstation`
+1. Ensure `workstation` CLI is installed: `npm install -g workstation.md`
 2. Ensure you have an SSH keypair. If not, run: `ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519`
 3. Create a workstation: `workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)"`
 4. Parse the JSON response to get `host` and `port`
