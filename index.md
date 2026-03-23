@@ -91,6 +91,18 @@ Each workstation is a Linux container with:
 - **SSH access**: on a dedicated port, key-based auth
 - **Root access**: full control, install anything with `apt`
 
+## Lifecycle
+
+Every workstation has a **24-hour TTL**. This ensures abandoned workstations are automatically cleaned up. If you're still using it, extend it:
+
+```bash
+workstation ws-a1b2c3 extend
+```
+
+The `extend` command signs the workstation ID with your SSH private key and sends the signature to the server. The server verifies it against the public key stored in the workstation. Only the key holder can extend.
+
+Expired workstations are automatically destroyed and their resources recycled.
+
 ## How It Works
 
 1. You call `workstation create` with your SSH public key
@@ -98,7 +110,8 @@ Each workstation is a Linux container with:
 3. Your public key is injected into the container's `authorized_keys`
 4. A dedicated port is mapped to the container's SSH (port 22)
 5. A public URL `https://<id>.workstation.md` is routed to the container's port 80
-6. You get back the connection details and start working
+6. You get back the connection details — workstation expires in 24h
+7. Call `extend` to renew, or `destroy` to clean up
 
 ## For AI Agents
 
