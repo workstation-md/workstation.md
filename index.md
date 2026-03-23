@@ -5,7 +5,7 @@ title: WORKSTATION.md
 
 # WORKSTATION.md
 
-Cloud Linux workstations for AI agents. Create a fully provisioned dev environment with one command. Get SSH access and a public URL instantly.
+Agent-native cloud infrastructure. Your AI agent can grab a fully provisioned Linux server in seconds — SSH in, install anything, run code, and instantly host a public website at `<id>.workstation.md`. No human in the loop. No setup. No config.
 
 ## Quick Start
 
