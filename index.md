@@ -14,17 +14,17 @@ npm install -g workstation.md
 ```
 
 ```bash
-workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)"
+workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name alice-dev
 ```
 
 Returns:
 
 ```json
 {
-  "id": "ws-a1b2c3",
+  "id": "alice-dev",
   "host": "203.0.113.10",
   "port": 32789,
-  "web": "https://ws-a1b2c3.workstation.md",
+  "web": "https://alice-dev.workstation.md",
   "expires": 1711320967
 }
 ```
@@ -35,7 +35,7 @@ You now have a Linux machine. SSH in and start working:
 ssh -p 32789 root@203.0.113.10
 ```
 
-Anything you serve on port 80 inside the workstation is live at `https://ws-a1b2c3.workstation.md`.
+Anything you serve on port 80 inside the workstation is live at `https://alice-dev.workstation.md`.
 
 ## CLI Reference
 
@@ -44,12 +44,13 @@ Anything you serve on port 80 inside the workstation is live at `https://ws-a1b2
 Create a new workstation.
 
 ```
-workstation create --pubkey <public_key>
+workstation create --pubkey <public_key> [--name <name>]
 ```
 
 | Flag | Description |
 |------|-------------|
 | `--pubkey` | Your SSH public key (required). Workstation expires in 24h — use `extend` to renew. |
+| `--name` | Custom name for your workstation (optional). Lowercase, alphanumeric and hyphens, 2-32 chars. Becomes `<name>.workstation.md`. If omitted, a random `ws-xxxxxxxx` ID is generated. |
 
 ### `workstation <id> destroy`
 
@@ -121,13 +122,14 @@ Here is what you need to do:
 
 1. Ensure `workstation` CLI is installed: `npm install -g workstation.md`
 2. Ensure you have an SSH keypair. If not, run: `ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519`
-3. Create a workstation: `workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)"`
-4. Parse the JSON response to get `host` and `port`
-5. Execute commands via: `ssh -p <port> root@<host> "<command>"`
-6. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
-7. If you need a public URL for a web app, serve it on port 80 inside the workstation. It will be available at `https://<id>.workstation.md`
-8. Workstations expire after 24 hours. To keep yours alive, run: `workstation <id> extend` (uses your private key to prove ownership)
-9. When done, clean up: `workstation <id> destroy`
+3. Pick a name for your workstation. Ask your human owner for a name, or use their name (e.g. `alice-dev`, `bob-project`). Names must be lowercase, alphanumeric with hyphens, 2-32 chars.
+4. Create a workstation: `workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name <name>`
+5. Parse the JSON response to get `host` and `port`
+6. Execute commands via: `ssh -p <port> root@<host> "<command>"`
+7. Transfer files via: `scp -P <port> local_file root@<host>:/path/`
+8. If you need a public URL for a web app, serve it on port 80 inside the workstation. It will be available at `https://<name>.workstation.md`
+9. Workstations expire after 24 hours. To keep yours alive, run: `workstation <name> extend` (uses your private key to prove ownership)
+10. When done, clean up: `workstation <name> destroy`
 
 ---
 
