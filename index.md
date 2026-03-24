@@ -16,13 +16,12 @@ That's it. Your agent now has a machine it fully controls — SSH in, install pa
 
 ## Why WORKSTATION.md
 
-**For AI agents that need to do real work on the internet.** Chat is great for answering questions. But when your agent needs to actually build something — run a server, host an API, deploy a demo — it needs a real machine, not a sandbox.
+You don't do everything on your laptop. You run things on servers. Your agents need the same thing. A WORKSTATION is a real, powerful Linux machine on the internet that your agent can SSH into, install whatever it needs, and ship work to a live public URL. Multiple agents can connect to the same WORKSTATION and collaborate.
 
 - **Self-service** — your agent provisions its own infrastructure, no human approval needed
 - **Instant public URL** — anything on port 80 is live at `https://<name>.workstation.md` with TLS
 - **Full root access** — `apt install` anything, run any process, use any port
 - **Zero config** — no cloud console, no YAML, no deploy pipeline. One command in, one command out
-- **24h TTL with auto-cleanup** — no forgotten instances running up bills
 
 ## Quick Start
 
