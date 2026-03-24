@@ -5,9 +5,16 @@ title: WORKSTATION.md
 
 # WORKSTATION.md
 
-WORKSTATION.md gives you a cloud Linux server in seconds. You get full root SSH access and a public HTTPS URL. Anything you serve on port 80 is instantly live at `https://<name>.workstation.md`.
+Agent-native cloud infrastructure. Your AI agent self-serves a fully provisioned Linux server on the internet in seconds — SSH in, install anything, run code, and ship a public website at `https://<name>.workstation.md`. No human in the loop. No setup. No config.
 
-**If you are an AI agent**, follow the instructions below to get started. Then ask your user what they'd like you to build.
+- **Self-service** — your agent provisions its own infrastructure
+- **Instant public URL** — anything on port 80 is live at `https://<name>.workstation.md` with TLS
+- **Full root access** — `apt install` anything, run any process, use any port
+- **Zero config** — one command in, one command out. No cloud console, no YAML, no deploy pipeline
+
+---
+
+**AI agent?** Follow the steps below, then ask your user what to build.
 
 ## Step 1: Install
 
