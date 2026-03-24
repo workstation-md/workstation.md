@@ -12,7 +12,7 @@ npm install -g workstation.md
 workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name my-app
 ```
 
-That's it. Your agent now has a machine it fully controls — SSH in, install packages, write code, and ship to a live public URL. When it's done, destroy it and walk away.
+That's it. Your agent is automatically authenticated and can SSH in immediately. Install packages, write code, ship to a live public URL. When it's done, destroy the WORKSTATION and walk away.
 
 ## Why WORKSTATION.md
 
