@@ -5,19 +5,30 @@ title: WORKSTATION.md
 
 # WORKSTATION.md
 
-Agent-native cloud infrastructure. Your AI agent can grab a fully provisioned Linux server in seconds — SSH in, install anything, run code, and instantly host a public website at `https://<id>.workstation.md`. No human in the loop. No setup. No config.
+Agent-native cloud infrastructure. Your AI agent self-serves a fully provisioned Linux server on the internet in seconds. Install anything, run code, and ship a public-facing website or app at `https://<name>.workstation.md`. No human in the loop. No setup. No config.
+
+```bash
+npm install -g workstation.md
+workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name my-app
+```
+
+That's it. Your agent now has a machine it fully controls — SSH in, install packages, write code, and ship to a live public URL. When it's done, destroy it and walk away.
+
+## Why WORKSTATION.md
+
+**For AI agents that need to do real work on the internet.** Chat is great for answering questions. But when your agent needs to actually build something — run a server, host an API, deploy a demo — it needs a real machine, not a sandbox.
+
+- **Self-service** — your agent provisions its own infrastructure, no human approval needed
+- **Instant public URL** — anything on port 80 is live at `https://<name>.workstation.md` with TLS
+- **Full root access** — `apt install` anything, run any process, use any port
+- **Zero config** — no cloud console, no YAML, no deploy pipeline. One command in, one command out
+- **24h TTL with auto-cleanup** — no forgotten instances running up bills
 
 ## Quick Start
 
 ```bash
-npm install -g workstation.md
-```
-
-```bash
 workstation create --pubkey "$(cat ~/.ssh/id_ed25519.pub)" --name alice-dev
 ```
-
-Returns:
 
 ```json
 {
@@ -29,13 +40,24 @@ Returns:
 }
 ```
 
-You now have a Linux machine. SSH in and start working:
+SSH in and start working:
 
 ```bash
 ssh -p 32789 root@203.0.113.10
 ```
 
 Anything you serve on port 80 inside the WORKSTATION is live at `https://alice-dev.workstation.md`.
+
+## What You Get
+
+Each WORKSTATION is a Linux container with:
+
+- **Ubuntu 22.04** base
+- **Languages**: Python 3, Node.js 20, Go
+- **Tools**: git, curl, wget, jq, vim, docker, nginx
+- **Web hosting**: port 80 exposed at `https://<id>.workstation.md` — see `/root/README.md` inside the WORKSTATION for examples
+- **SSH access**: on a dedicated port, key-based auth
+- **Root access**: full control, install anything with `apt`
 
 ## CLI Reference
 
@@ -81,28 +103,15 @@ List your active WORKSTATIONs with remaining TTL.
 workstation list
 ```
 
-## What You Get
-
-Each WORKSTATION is a Linux container with:
-
-- **Ubuntu 22.04** base
-- **Languages**: Python 3, Node.js 20, Go
-- **Tools**: git, curl, wget, jq, vim, docker, nginx
-- **Web hosting**: port 80 exposed at `https://<id>.workstation.md` — see `/root/README.md` inside the WORKSTATION for examples
-- **SSH access**: on a dedicated port, key-based auth
-- **Root access**: full control, install anything with `apt`
-
 ## Lifecycle
 
-Every WORKSTATION has a **24-hour TTL**. This ensures abandoned WORKSTATIONs are automatically cleaned up. If you're still using it, extend it:
+Every WORKSTATION has a **24-hour TTL**. Abandoned WORKSTATIONs are automatically destroyed and their resources recycled. If you're still using it, extend:
 
 ```bash
 workstation ws-a1b2c3 extend
 ```
 
-The `extend` command signs the WORKSTATION ID with your SSH private key and sends the signature to the server. The server verifies it against the public key stored in the WORKSTATION. Only the key holder can extend.
-
-Expired WORKSTATIONs are automatically destroyed and their resources recycled.
+The `extend` command signs the WORKSTATION ID with your SSH private key. The server verifies it against the public key stored in the container. Only the key holder can extend.
 
 ## How It Works
 
@@ -134,4 +143,4 @@ Here is what you need to do:
 
 ---
 
-[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md) · [llms.txt](https://workstation.md/llms.txt)
+[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md)
