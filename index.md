@@ -134,4 +134,4 @@ Here is what you need to do:
 
 ---
 
-[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md) · [SKILL.md](https://workstation.md/SKILL.md) · [llms.txt](https://workstation.md/llms.txt)
+[GitHub](https://github.com/workstation-md/workstation-cli) · [npm](https://www.npmjs.com/package/workstation.md) · [llms.txt](https://workstation.md/llms.txt)

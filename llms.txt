@@ -4,8 +4,7 @@
 
 ## Docs
 
-- [Homepage](https://workstation.md): Quick start, CLI reference, how it works
-- [SKILL.md](https://workstation.md/SKILL.md): Full agent skill — setup, SSH patterns, website creation examples
+- [Homepage](https://workstation.md): Quick start, CLI reference, how it works, agent instructions
 - [npm](https://www.npmjs.com/package/workstation.md): Package install
 - [GitHub](https://github.com/workstation-md/workstation-cli): Source code
 
